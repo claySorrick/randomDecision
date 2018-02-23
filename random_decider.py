@@ -1,11 +1,11 @@
 from abc import abstractmethod
+from random_fetcher import Random_Client
 
 # R_S = '0062980566143536201066017731944112043166104289330456701626650503804970856884726105184658629518811375'
 R_S = '5362980566143536201066017731944112043166104289330456701626650503804970856884726105184658629518811375'
 
 class Random_Decider:
     name = ''
-    finished = False
     alive = False
     true_count = 0
     false_count = 0
@@ -24,13 +24,6 @@ class Random_Decider:
 
     def die(self):
         self.alive = False
-
-    def is_finished(self):
-        return self.finished
-
-    def finish(self):
-        self.finished = True
-        self.die()
 
     def add(self, res):
         if res:
@@ -61,11 +54,11 @@ class Jack(Random_Decider):
         self.make_result()
 
 #odd
-class James(Random_Decider):
+class Jamy(Random_Decider):
     
     def __init__(self, digits):
         Random_Decider.__init__(self)
-        self.name = 'James'
+        self.name = 'Jamy'
         self.alive = True
         self.digits = digits
         
@@ -240,6 +233,7 @@ class Don(Random_Decider):
 #sum gt prod
 class Will(Random_Decider):
     
+    
     def __init__(self, digits):
         Random_Decider.__init__(self)
         self.name = 'Will'
@@ -261,11 +255,11 @@ class Will(Random_Decider):
         self.make_result()
 
 #sum lt prod
-class Wayne(Random_Decider):
+class Wayn(Random_Decider):
     
     def __init__(self, digits):
         Random_Decider.__init__(self)
-        self.name = 'Wayne'
+        self.name = 'Wayn'
         self.alive = True
         self.digits = digits
         self.sum = 0
@@ -283,50 +277,46 @@ class Wayne(Random_Decider):
             self.add(res)
         self.make_result()
 
-        
+class Decision_Manager():
+    
+    def __init__(self):
+        self.deciders = []
+        self.reset()
+    
+    def reset(self):
+        digs = self.get_digits()
+        self.deciders = []
+        self.deciders.append(Jack(digs))
+        self.deciders.append(Jamy(digs))
+        self.deciders.append(Chip(digs))
+        self.deciders.append(Carl(digs))
+        self.deciders.append(Sam(digs))
+        self.deciders.append(Sara(digs))
+        self.deciders.append(Tom(digs))
+        self.deciders.append(Tim(digs))
+        self.deciders.append(Will(digs))
+        self.deciders.append(Wayn(digs))
+        self.deciders.append(Dan(digs))
+        self.deciders.append(Don(digs))
 
-def p_result(a):
-    print()
-    print(a.name)
-    print(a.true_count)
-    print(a.false_count)
-    print(a.result)
+
+    def get_digits(self):
+        rc = Random_Client()
+        numbers = rc.get_numbers()
+        return numbers
+
+    def get_decision(self):
+        trues, falses = 0, 0
+        for decider in self.deciders:
+            decider.decide()
+            if decider.result:
+                trues += 1
+            else:
+                falses += 1
+        return (trues, falses)
+
 
 if __name__ == "__main__":
-    #Jack,James,Chip,Carl,Sam,Sara,Tom,Tim,Will,Wayne,Dan,Don
-    j = Jack(R_S)
-    j.decide()
-    p_result(j)
-    j = James(R_S)
-    j.decide()
-    p_result(j)
-    j = Chip(R_S)
-    j.decide()
-    p_result(j)
-    j = Carl(R_S)
-    j.decide()
-    p_result(j)
-    j = Sam(R_S)
-    j.decide()
-    p_result(j)
-    j = Sara(R_S)
-    j.decide()
-    p_result(j)
-    j = Tom(R_S)
-    j.decide()
-    p_result(j)
-    j = Tim(R_S)
-    j.decide()
-    p_result(j)
-    j = Will(R_S)
-    j.decide()
-    p_result(j)
-    j = Wayne(R_S)
-    j.decide()
-    p_result(j)
-    j = Dan(R_S)
-    j.decide()
-    p_result(j)
-    j = Don(R_S)
-    j.decide()
-    p_result(j)
+    #Jack,Jamy,Chip,Carl,Sam,Sara,Tom,Tim,Will,Wayn,Dan,Don
+    dm = Decision_Manager()
+    print(dm.get_decision())

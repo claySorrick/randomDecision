@@ -2,10 +2,10 @@ from jsonrpcclient.http_client import HTTPClient
 
 class Random_Client(HTTPClient):
     
-    def __init__(self, endpoint):
+    def __init__(self, endpoint='https://api.random.org/json-rpc/1/invoke'):
         HTTPClient.__init__(self, endpoint)
         
-    def get_numbers(self, n=1000, min=0, max=9):
+    def get_numbers(self, n=333, min=0, max=9):
         params = {
             "apiKey": "0e4a2072-e364-404e-a26e-b574732a0d7d",
             "n": n,
@@ -16,5 +16,5 @@ class Random_Client(HTTPClient):
         return r['random']['data']
 
 if __name__ == "__main__":
-    rc = Random_Client('https://api.random.org/json-rpc/1/invoke')
+    rc = Random_Client()
     print(rc.get_numbers())
